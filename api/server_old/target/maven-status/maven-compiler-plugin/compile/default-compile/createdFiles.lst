@@ -1,0 +1,15 @@
+org\openapitools\model\NewUser.class
+org\openapitools\model\Ticket$PriorityEnum.class
+org\openapitools\api\UsersApi.class
+org\openapitools\api\TicketsApi.class
+org\openapitools\model\User.class
+org\openapitools\model\NewTicket.class
+org\openapitools\model\Description$TypeEnum.class
+org\openapitools\model\Ticket$StatusEnum.class
+org\openapitools\model\Ticket.class
+org\openapitools\model\NewTicket$PriorityEnum.class
+org\openapitools\api\ApiUtil.class
+org\openapitools\model\UpdateTicket$PriorityEnum.class
+org\openapitools\model\Description.class
+org\openapitools\model\UpdateTicket.class
+org\openapitools\model\UpdateTicket$StatusEnum.class

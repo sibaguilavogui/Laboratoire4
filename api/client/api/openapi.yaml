@@ -1,0 +1,309 @@
+openapi: 3.0.3
+info:
+  description: |
+    API REST pour la gestion de tickets (Lab 4 - Architecture des logiciels). Permet aux utilisateurs de créer, consulter, et mettre à jour des tickets, et aux administrateurs de les assigner, commenter ou fermer.
+  title: Système de gestion de tickets - UQAC
+  version: 1.0.0
+servers:
+- description: Serveur local de développement
+  url: http://localhost:8080
+tags:
+- description: Opérations sur les tickets
+  name: tickets
+- description: Gestion des utilisateurs
+  name: users
+paths:
+  /tickets:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Ticket'
+                type: array
+          description: Liste des tickets
+      summary: Liste tous les tickets
+      tags:
+      - tickets
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: tickets
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTicket'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+          description: Ticket créé
+      summary: Crée un nouveau ticket
+      tags:
+      - tickets
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: tickets
+  /tickets/{id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+          description: Ticket trouvé
+        "404":
+          description: Ticket introuvable
+      summary: Récupère un ticket par ID
+      tags:
+      - tickets
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: tickets
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTicket'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+          description: Ticket mis à jour
+      summary: "Met à jour un ticket (statut, priorité, assignation)"
+      tags:
+      - tickets
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: tickets
+  /users:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/User'
+                type: array
+          description: Liste des utilisateurs
+      summary: Liste tous les utilisateurs
+      tags:
+      - users
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: users
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Utilisateur créé
+      summary: Crée un nouvel utilisateur
+      tags:
+      - users
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: users
+components:
+  schemas:
+    User:
+      example:
+        role: role
+        name: name
+        userID: 6
+        email: email
+      properties:
+        userID:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+      type: object
+    NewUser:
+      example:
+        role: role
+        name: name
+        email: email
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+      required:
+      - email
+      - name
+      - role
+      type: object
+    Ticket:
+      example:
+        title: title
+        priority: BASSE
+        assignedUser:
+          role: role
+          name: name
+          userID: 6
+          email: email
+        descriptions:
+        - addedBy:
+            role: role
+            name: name
+            userID: 6
+            email: email
+          id: 1
+          text: text
+          type: TEXTE
+          uri: uri
+        - addedBy:
+            role: role
+            name: name
+            userID: 6
+            email: email
+          id: 1
+          text: text
+          type: TEXTE
+          uri: uri
+        ticketID: 0
+        status: OUVERT
+      properties:
+        ticketID:
+          type: integer
+        title:
+          type: string
+        priority:
+          enum:
+          - BASSE
+          - MOYENNE
+          - HAUTE
+          type: string
+        status:
+          enum:
+          - OUVERT
+          - ASSIGNE
+          - VALIDATION
+          - TERMINE
+          type: string
+        assignedUser:
+          $ref: '#/components/schemas/User'
+        descriptions:
+          items:
+            $ref: '#/components/schemas/Description'
+          type: array
+      type: object
+    NewTicket:
+      example:
+        title: title
+        priority: BASSE
+      properties:
+        title:
+          type: string
+        priority:
+          enum:
+          - BASSE
+          - MOYENNE
+          - HAUTE
+          type: string
+      required:
+      - priority
+      - title
+      type: object
+    UpdateTicket:
+      example:
+        priority: BASSE
+        assignedUserId: 0
+        status: OUVERT
+      properties:
+        status:
+          enum:
+          - OUVERT
+          - ASSIGNE
+          - VALIDATION
+          - TERMINE
+          type: string
+        priority:
+          enum:
+          - BASSE
+          - MOYENNE
+          - HAUTE
+          type: string
+        assignedUserId:
+          type: integer
+      type: object
+    Description:
+      example:
+        addedBy:
+          role: role
+          name: name
+          userID: 6
+          email: email
+        id: 1
+        text: text
+        type: TEXTE
+        uri: uri
+      properties:
+        id:
+          type: integer
+        type:
+          enum:
+          - TEXTE
+          - IMAGE
+          - VIDEO
+          - FICHIER
+          type: string
+        text:
+          type: string
+        uri:
+          type: string
+        addedBy:
+          $ref: '#/components/schemas/User'
+      type: object
+

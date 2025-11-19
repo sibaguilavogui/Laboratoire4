@@ -1,0 +1,12 @@
+.openapi-generator-ignore
+README.md
+pom.xml
+src/main/java/org/openapitools/api/ApiUtil.java
+src/main/java/org/openapitools/api/TicketsApi.java
+src/main/java/org/openapitools/api/UsersApi.java
+src/main/java/org/openapitools/model/Description.java
+src/main/java/org/openapitools/model/NewTicket.java
+src/main/java/org/openapitools/model/NewUser.java
+src/main/java/org/openapitools/model/Ticket.java
+src/main/java/org/openapitools/model/UpdateTicket.java
+src/main/java/org/openapitools/model/User.java
